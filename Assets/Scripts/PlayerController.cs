@@ -12,8 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public float moveSPD = 3f;
     public float LookSpeed = 10f;
     public Transform PlayerCamera;
+    public bool isSwiming = false;
 
-
+    
     private void Awake()
     {
         input = new PlayerInputActions();
@@ -95,4 +96,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.AddForce(Vector3.up * JumpForce, ForceMode .Impulse);
     }
+
+    private void OnTriggerEnter(Collider PlayerCollider)
+    {
+        if (PlayerCollider.CompareTag("Player"))
+        {
+            
+        }
+    }
+
+//u aint done it only checks if this is the player
 }

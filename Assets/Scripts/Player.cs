@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     
     void Start()
     {        
-        Debug.Log("WE working");
+        Debug.Log("mouse removed");
         LockCursor();
         
     }
@@ -28,4 +28,5 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;//Unhide Cursor 
     }
+    
 }
