@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject player;
     public float HP = 100f;
+    public bool isSubmerged = false;
 
-    
+    private void Update()
+    {
+       
+    }
+
     void Start()
     {        
         Debug.Log("mouse removed");
@@ -13,11 +17,6 @@ public class Player : MonoBehaviour
         
     }
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
      void  LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -29,4 +28,6 @@ public class Player : MonoBehaviour
         Cursor.visible = true;//Unhide Cursor 
     }
     
+    
+
 }

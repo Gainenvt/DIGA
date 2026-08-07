@@ -5,20 +5,23 @@ public class PlayerMovement : MonoBehaviour
 {
     private PlayerInputActions input;
     private Rigidbody rb;
+    private Player player;
+    private float swimSpd = 2f;
     private Vector2 moveInput;
     private Vector2 lookInput;
     private float xRotation = 0f;
-    public float JumpForce = 5f;
+
+    public float JumpForce = 2f;
     public float moveSPD = 3f;
     public float LookSpeed = 10f;
-    public Transform PlayerCamera;
-    public bool isSwiming = false;
 
-    
+    public Transform PlayerCamera;
+
     private void Awake()
     {
         input = new PlayerInputActions();
         rb = GetComponent<Rigidbody>();
+        player = GetComponent<Player>();
     }
 
     private void OnEnable()
@@ -46,16 +49,16 @@ public class PlayerMovement : MonoBehaviour
 
         input.Disable();
     }
+
     private void FixedUpdate()
     {
         Move();
-
-
     }
+
     private void Update()
     {
         Look();
-       
+        Swimming();
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -74,36 +77,49 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Move()
-    {   Vector3 movement = transform.right * moveInput.x + transform.forward * moveInput.y;
+    {
+        Vector3 movement =
+            transform.right * moveInput.x +
+            transform.forward * moveInput.y;
 
-    rb.linearVelocity = new Vector3(movement.x * moveSPD, rb.linearVelocity.y, movement.z * moveSPD);
-
+        rb.linearVelocity = new Vector3(
+            movement.x * moveSPD,
+            rb.linearVelocity.y,
+            movement.z * moveSPD
+        );
     }
 
-
     private void Look()
-    {   //horizontal mouse movement x 
+    {
         transform.Rotate(Vector3.up * lookInput.x * LookSpeed * Time.deltaTime);
-        //vertical mouse movement v
+
         xRotation -= lookInput.y * LookSpeed * Time.deltaTime;
-        //clamp prevention 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        PlayerCamera.localRotation = Quaternion.Euler(xRotation, 0f , 0f);
+        PlayerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
     private void Jump()
     {
-        rb.AddForce(Vector3.up * JumpForce, ForceMode .Impulse);
+        if (!player.isSubmerged)
+        {
+            rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+        }else
+        {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, swimSpd, rb.linearVelocity.z);
+        }
+
     }
 
-    private void OnTriggerEnter(Collider PlayerCollider)
+    private void Swimming()
     {
-        if (PlayerCollider.CompareTag("Player"))
+        if (player.isSubmerged)
         {
-            
+            rb.useGravity = false;
+        }
+        else
+        {
+            rb.useGravity = true;
         }
     }
-
-//u aint done it only checks if this is the player
 }
